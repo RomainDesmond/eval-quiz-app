@@ -20,3 +20,4 @@ exit-code: '1' -> bloque la fusion (dans notre cas nécessaire)
 Exemple CI Trivy : <br>![alt text](image-4.png)
 <br>Exemple avec détail (ajouté dans le fichier trivy pour debug):
     <br>![alt text](image-5.png)
+    <br>résultat : <br>![alt text](image-6.png)
