@@ -1,5 +1,5 @@
 # Utiliser une image de base Node.js légère
-FROM node:20-alpine
+FROM node:22-alpine
 # Définir le répertoire de travail de l'application
 WORKDIR /app 
 RUN chown node:node /app
