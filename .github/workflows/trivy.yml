@@ -30,29 +30,41 @@ jobs:
       matrix:
         include:
           - name: frontend
-            dockerfile: Dockerfile
+            context: .
           - name: backend
-            dockerfile: backend/Dockerfile
+            context: backend
           - name: postgres
-            dockerfile: database/Dockerfile
+            context: database
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Build an image from Dockerfile
         run: |
-          docker build -f ${{ matrix.dockerfile }} -t ${{ matrix.name }}:${{ github.sha }} .
+          docker build -t ${{ matrix.name }}:${{ github.sha }} ${{ matrix.context }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@38b337fff0a2f984d5be173c99e3f633438167ec
         with:
           image-ref: '${{ matrix.name }}:${{ github.sha }}'
-          format: 'template'
+          #format: 'template'
+          format: 'table'
+          severity: 'CRITICAL'
+          ignore-unfixed: true
+          exit-code: '1'
+
+      # 2) Scan SARIF pour l'onglet Security (ne bloque pas)
+      - name: Run Trivy (sarif)
+        if: always()
+        uses: aquasecurity/trivy-action@38b337fff0a2f984d5be173c99e3f633438167ec
+        with:
+          image-ref: '${{ matrix.name }}:${{ github.sha }}'
+          format: 'sarif'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results-${{ matrix.name }}.sarif'
           severity: 'CRITICAL'
           ignore-unfixed: true
-          exit-code: '1'
+          exit-code: '0'
           
       - name: Upload Trivy scan results to GitHub Security tab
         if: always()
