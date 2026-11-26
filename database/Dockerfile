@@ -2,5 +2,5 @@
 FROM postgres:16
 ENV POSTGRES_DB=quiz_db
 ENV POSTGRES_USER=quiz_user
-COPY database/init.sql /docker-entrypoint-initdb.d/
+COPY init.sql /docker-entrypoint-initdb.d/
 USER postgres
