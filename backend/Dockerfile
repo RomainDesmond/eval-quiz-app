@@ -19,4 +19,4 @@ RUN npm ci \
 # Exposer le port
 EXPOSE 3007
 # Démarrer l'application 
-CMD ["npm", "run", "dev", "--", "--host"]
+CMD ["node", "server.js"]
