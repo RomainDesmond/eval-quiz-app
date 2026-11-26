@@ -1,5 +1,5 @@
 # Utiliser une image de base Node.js légère
-FROM node:18-alpine
+FROM node:20-alpine
 # Définir le répertoire de travail de l'application
 WORKDIR /app 
 
@@ -9,15 +9,14 @@ WORKDIR /app
 #COPY src src
 #COPY public public
 
-COPY ./backend .
+COPY backend/ .
+#COPY backend/server.js server.js 
+#COPY backend/package.json package.json
 # Copier les fichiers sources de l'application dans le conteneur
 
 # Installer les dépendances, construire l'application et nettoyer les modules Node.js
-RUN npm install \
-    && npm install -g serve \
-    && npm run build \
-    && rm -fr node_modules
+RUN npm ci \
 # Exposer le port
 EXPOSE 3007
 # Démarrer l'application 
-CMD ["serve", "-s", "build"]
+CMD ["npm", "run", "dev", "--", "--host"]

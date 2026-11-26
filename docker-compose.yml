@@ -26,14 +26,14 @@ services:
     networks:
       - eval-quizz-app_net
 
-  postgreSQL:
-    image: postgres:16
+  postgres:
+    #zimage: postgres:16
     container_name: eval-quizz-app_postgres_cont
     restart : unless-stopped
     ports : 
       - 5432:5432
-    #build:
-    #  dockerfile: Dockerfile
+    build:
+      dockerfile: ./database/Dockerfile
     environment : 
       POSTGRES_PASSWORD: example #à changer et sécuriser, mdp temporaire
     volumes:
