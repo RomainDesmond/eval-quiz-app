@@ -5,7 +5,7 @@ WORKDIR /app
 RUN chown node:node /app
 USER node
 
-COPY --chown=node:node backend/ .
+COPY --chown=node:node . .
 
 RUN npm ci 
 EXPOSE 3007
