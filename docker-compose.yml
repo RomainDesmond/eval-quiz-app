@@ -16,11 +16,15 @@ services:
     ports:
       - 3007:3007
     build:
-      dockerfile: ./backend/Dockerfile
+      context: ./backend
+      dockerfile: /Dockerfile
     environment:
       RESEND_API_KEY: ${RESEND_API_KEY}
       JWT_SECRET: ${JWT_SECRET}
-      DATABASE_URL: postgresql://quiz_user:example@postgres:5432/quiz_db
+      ADMIN_USERNAME : ${ADMIN_USERNAME}
+      ADMIN_PASSWORD : ${ADMIN_PASSWORD}
+      
+      DATABASE_URL: postgresql://quiz_user:${POSTGRES_PASSWORD}@postgres:5432/quiz_db
     depends_on:
       - postgres
     networks:
@@ -32,9 +36,10 @@ services:
     ports:
       - 5432:5432
     build:
-      dockerfile: ./database/Dockerfile
+      context: ./database
+      dockerfile: Dockerfile
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - db_postgres_data_vol:/var/lib/postgresql/data
     networks:
