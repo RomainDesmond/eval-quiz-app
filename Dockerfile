@@ -1,16 +1,20 @@
+# Étape 1 : build
 FROM node:22-alpine AS build
-
 WORKDIR /app
-
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm ci
-
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine
+# Étape 2 : nginx
 
+
+FROM nginxinc/nginx-unprivileged:alpine3.24
+#On repasse en root pour pouvoir upgrade une dépendance et ne pas avoir de faille critique
+USER root 
+RUN rm /etc/nginx/conf.d/default.conf && apk upgrade --no-cache brotli-libs
+#On met un user sans droits
+USER 65532
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist/ /usr/share/nginx/html/
-
+COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80

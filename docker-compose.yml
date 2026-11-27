@@ -1,0 +1,54 @@
+services:
+  frontend:
+    container_name: eval-quizz-app_frontend_cont
+    ports:
+      - 5173:80
+    build:
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    networks:
+      - eval-quizz-app_net
+
+  backend:
+    container_name: eval-quizz-app_backend_cont
+    restart: unless-stopped
+    ports:
+      - 3007:3007
+    build:
+      context: ./backend
+      dockerfile: /Dockerfile
+    environment:
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_USERNAME : ${ADMIN_USERNAME}
+      ADMIN_PASSWORD : ${ADMIN_PASSWORD}
+      
+      DATABASE_URL: postgresql://quiz_user:${POSTGRES_PASSWORD}@postgres:5432/quiz_db
+    depends_on:
+      - postgres
+    networks:
+      - eval-quizz-app_net
+
+  postgres:
+    container_name: eval-quizz-app_postgres_cont
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_postgres_data_vol:/var/lib/postgresql/data
+    networks:
+      - eval-quizz-app_net
+
+networks:
+  eval-quizz-app_net:
+    driver: bridge
+    name: eval-quizz-app_net
+
+volumes:
+  db_postgres_data_vol:
