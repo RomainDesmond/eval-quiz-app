@@ -50,7 +50,6 @@ jobs:
           #format: 'template'
           format: 'table'
           severity: 'CRITICAL'
-          ignore-unfixed: true
           exit-code: '1'
 
       # 2) Scan SARIF pour l'onglet Security (ne bloque pas)
@@ -63,7 +62,6 @@ jobs:
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results-${{ matrix.name }}.sarif'
           severity: 'CRITICAL'
-          ignore-unfixed: true
           exit-code: '0'
           
       - name: Upload Trivy scan results to GitHub Security tab
