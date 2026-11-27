@@ -34,6 +34,7 @@ function shuffleArray(array) {
 // Show registration form on load
 displayRegistrationForm();
 
+
 function displayRegistrationForm() {
   app.innerHTML = `
     <h1>Quiz App</h1>
