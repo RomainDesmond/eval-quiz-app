@@ -36,7 +36,7 @@ displayRegistrationForm();
 
 function displayRegistrationForm() {
   app.innerHTML = `
-    <h1>Quiz App</h1>
+    <h1>Quiz App Modifié</h1>
     <p>Testez vos connaissances !</p>
     <form id="registration-form" class="registration-form">
       <div class="form-group">
